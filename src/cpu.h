@@ -6,6 +6,9 @@
 #elif defined(__APPLE__)
 	#include <sys/types.h>
 	#include <sys/sysctl.h>
+#elif defined(__OpenBSD__)
+	#include <sys/types.h>
+	#include <sys/sysctl.h>
 #else
 	#error "Unsupported platform"
 #endif
@@ -26,6 +29,9 @@ static inline int get_cpu_cores() {
 	#elif defined(__APPLE__)
 		size_t size = sizeof(num_cores);
 		sysctlbyname("hw.physicalcpu", &num_cores, &size, NULL, 0);
+	#elif defined(BSD)
+		size_t size = sizeof(num_cores);
+		sysctlbyname("hw.ncpu", &num_cores, &size, NULL, 0);
 	#else
 		num_cores = -1; // Unsupported platform
 	#endif
